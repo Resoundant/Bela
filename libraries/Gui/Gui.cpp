@@ -62,6 +62,7 @@ void Gui::ws_connect(const std::string& address, const WSServerDetails* id)
 {
 	// TODO: this is currently sent to all clients, but it should only be sent to the new one
 	// send connection JSON
+	printf("ws_connect %p\n", id);
 	JSONObject root;
 	root[L"event"] = new JSONValue(L"connection");
 	if(!_projectName.empty())
@@ -77,6 +78,7 @@ void Gui::ws_connect(const std::string& address, const WSServerDetails* id)
  */
 void Gui::ws_disconnect(const std::string& address, const WSServerDetails* id)
 {
+	printf("ws_disconnect %p\n", id);
 	for(auto& wsc : {&wsConnections, &wsActiveConnections})
 		if(wsc->count(id))
 			wsc->erase(id);
@@ -88,6 +90,7 @@ void Gui::ws_disconnect(const std::string& address, const WSServerDetails* id)
  */
 void Gui::ws_onControlData(const std::string& address, const WSServerDetails* id, const unsigned char* data, unsigned int size)
 {
+	printf("ws_onControlData %p: %s\n", id, data);
 	// parse the data into a JSONValue
 	JSONValue *value = JSON::Parse((const char*)data);
 	if (value == NULL || !value->IsObject()){
